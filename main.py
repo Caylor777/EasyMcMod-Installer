@@ -13,7 +13,7 @@ if args[1] == "fabric":
         shutil.copyfileobj(resp, out_file)
     resp.release_conn()
     os.system("fabric-installer.jar")
-    sys.exit()
+    os.remove("fabric-installer.jar")
 elif args[1] == "forge":
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     webbrowser.open
@@ -22,7 +22,6 @@ elif args[1] == "forge":
     print("*WHEN FORGE OPENS A NEW TAB WAIT 5 SECONDS THEN PRESS SKIP IN THE TOP RIGHT*")
     print("press enter once the installer has finished")
     input()
-    sys.exit()
 else:
     raise TypeError(f"\"{args[1]}\" is not a valid argument, must be \"forge\" or \"fabric\"")
 
@@ -64,4 +63,5 @@ for url in downloads["downloads"]:
     resp.release_conn()
     
     #move links to mods folder
-    os.replace(fileName, f"%appdata%/.minecraft/mods{fileName}")
+    os.replace(fileName, f"{os.getenv('APPDATA')}\\.minecraft\\mods\\{fileName}")
+    
