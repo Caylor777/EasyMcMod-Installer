@@ -25,7 +25,7 @@ else:
 
 #read fiiles to download
 downloadsDir = "downloads.json"
-if len(args) < 2:
+if len(args) > 2:
     downloadsDir = args[2]
     downloadsDir.replace("\"", "")
 f = open(downloadsDir)
