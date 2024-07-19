@@ -3,8 +3,6 @@ import urllib3.poolmanager
 
 #collect args
 args = sys.argv
-if len(args) > 2:
-    raise IndexError("Only 1 argument can be passed")
 if len(sys.argv) < 2:
     raise IndexError("1 argument must be passed")
 if args[1] == "fabric":
@@ -26,7 +24,11 @@ else:
     raise TypeError(f"\"{args[1]}\" is not a valid argument, must be \"forge\" or \"fabric\"")
 
 #read fiiles to download
-f = open("downloads.json")
+downloadsDir = "downloads.json"
+if len(args) < 2:
+    downloadsDir = args[2]
+    downloadsDir.replace("\"", "")
+f = open(downloadsDir)
 downloads = json.load(f)
 f.close()
 
