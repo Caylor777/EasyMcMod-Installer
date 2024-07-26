@@ -1,5 +1,5 @@
 # EasyMcMod Generator
-Create a .exe to easily install mods to the .minecraft/mods folder  
+Create a .exe to easily install minecraft mods to the .minecraft/mods folder  
 
 ## Installation
 1.zip or clone the github repository  
