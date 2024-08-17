@@ -12,6 +12,7 @@ def main(installer: str, modsPath: str, deletePreExistingMods: bool):
             os.replace(f"{modsPath}\\{jar}", f"PreExistingMods\\{jar}")
             
     modsList = os.listdir("mods")
+    modsList.remove("ignore")
 
     for jar in modsList:
         shutil.copy(f"mods\\{jar}", f"{modsPath}\\{jar}")
