@@ -1,0 +1,5 @@
+{
+    "UseJSON":[false],
+    "modsPath":["%appdata%/roaming/.minecraft/mods"],
+    "deletePreExistingMods":[false]
+}
