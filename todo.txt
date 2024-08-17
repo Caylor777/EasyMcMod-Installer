@@ -1,2 +1,0 @@
-delete files alreay in mods folder and ask if they want to be coppied
-pre intreage .jar installers for forge and fabric instead of having the end user download the insatllers

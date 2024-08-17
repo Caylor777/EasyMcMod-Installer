@@ -1,62 +1,42 @@
-import sys, json, os, shutil
+import json, os, shutil
 from ui import ui
 
-downloads = {}
-loader = ""
+def main(installer: str, modsPath: str, deletePreExistingMods: bool):
+    os.system(installer)
+    if deletePreExistingMods:
+        for jar in os.listdir(modsPath):
+            os.remove(f"{modsPath}\\{jar}")
+    else:
+        os.makedirs("PreExistingMods")
+        for jar in os.listdir(modsPath):
+            os.replace(f"{modsPath}\\{jar}", f"PreExistingMods\\{jar}")
+            
+    modsList = os.listdir("mods")
 
-#collect args
-args = sys.argv
-if len(args) < 2:
-    raise IndexError("1 argument must be passed")
-if args[1] == "fabric" or args[1] == "forge":
-    loader = args[1]
-else:
-    raise TypeError(f"\"{args[1]}\" is not a valid argument, must be \"forge\" or \"fabric\"")
-
-#read fiiles to download
-downloadsDir = "downloads.json"
-if len(args) > 2:
-    downloadsDir = args[2]
-    downloadsDir.replace("\"", "")
-f = open(downloadsDir)
-downloadsJSON = json.load(f)
-f.close()
-
-for url in downloadsJSON["downloads"]:
-    #checking validity of download links
-    if not (url.find("modrinth") == -1):
-        if not (len(url.split("/")) == 8):
-            raise ValueError("URL invalid, read README.md")
-        fileName = url.split("/")[7]
-    elif not (url.find("curseforge") == -1):
-        if not (len(url.split("/")) == 10):
-            raise ValueError("URL invalid, read README.md")
-        fileName = url.split("/")[8] + ".jar"
+    for jar in modsList:
+        shutil.copy(f"mods\\{jar}", f"{modsPath}\\{jar}")
         
+def difineSettings():
+    installer = ui.selectInstaller()
+    os.system(installer)
+    modsPath = ui.verifyModsPath(f"{os.getenv('APPDATA')}\\.minecraft\\mods\\")
+
+    if len(os.listdir(modsPath)) > 0:
+        deletePreExistingMods = ui.managePreExistingMods(modsPath)
     else:
-        raise ValueError("Unable to download from non modrinth/curseforge websites, read README.md")
-    if not (url.find("download") == -1) or not (url.find("versions") == -1):
+        deletePreExistingMods = True
+    main(installer, modsPath, deletePreExistingMods)
+
+f = open("settings.json")
+settingsJSON = json.load(f)
+f.close()
+
+if bool(settingsJSON["useJSON"]):
+    try:
+        settingsJSON["modsPath"].replace(f"%appdata%", os.getenv('APPDATA'))
+    except:
         pass
-    else:
-        raise ValueError("Not a valid download link, read README.md")
-    
-    downloads[url] = fileName
-
-#make installer.py
-f = open(f"installerBase{loader.title()}.py")
-installlerBase = f.read()
-f.close()
-
-installlerBase = installlerBase.replace("downloads = {}", f"downloads = {downloads}")
-
-f = open("installer.py", "x")
-f.write(installlerBase)
-f.close()
-
-#package installer.py
-os.system("pyinstaller installer.py --onefile")
-os.remove("installer.py")
-os.remove("installer.spec")
-shutil.move("dist/installer.exe", "installer.exe")
-shutil.rmtree("dist")
-shutil.rmtree("build")
+    deletePreExistingMods = settingsJSON["deletePreExistingMods"]
+    main(settingsJSON["installer"], settingsJSON["modsPath"], deletePreExistingMods)
+else:
+    difineSettings()

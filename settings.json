@@ -1,5 +1,6 @@
 {
-    "UseJSON":[false],
-    "modsPath":["%appdata%/roaming/.minecraft/mods"],
-    "deletePreExistingMods":[false]
+    "useJSON":false,
+    "installer":"fabric-installer-1.0.1.jar",
+    "modsPath":"%appdata%\\.minecraft\\mods",
+    "deletePreExistingMods":false
 }
