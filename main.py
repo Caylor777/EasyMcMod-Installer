@@ -13,13 +13,14 @@ def main(installer: str, modsPath: str, deletePreExistingMods: bool):
             
     modsList = os.listdir("mods")
     modsList.remove("ignore")
-
+    
     for jar in modsList:
         shutil.copy(f"mods\\{jar}", f"{modsPath}\\{jar}")
         
 def difineSettings():
     installer = ui.selectInstaller()
-    os.system(installer)
+    if not os.path.exists(f"{os.getenv('APPDATA')}\\.minecraft\\mods\\"):
+        os.makedirs(f"{os.getenv('APPDATA')}\\.minecraft\\mods\\")
     modsPath = ui.verifyModsPath(f"{os.getenv('APPDATA')}\\.minecraft\\mods\\")
 
     if len(os.listdir(modsPath)) > 0:
@@ -28,6 +29,7 @@ def difineSettings():
         deletePreExistingMods = True
     main(installer, modsPath, deletePreExistingMods)
 
+#start
 f = open("settings.json")
 settingsJSON = json.load(f)
 f.close()
