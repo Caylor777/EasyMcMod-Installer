@@ -18,10 +18,10 @@ def main(installer: str, modsPath: str, deletePreExistingMods: bool):
         shutil.copy(f"mods\\{jar}", f"{modsPath}\\{jar}")
         
 def difineSettings():
-    installer = ui.selectInstaller()
-    if not os.path.exists(f"{os.getenv('APPDATA')}\\.minecraft\\mods\\"):
-        os.makedirs(f"{os.getenv('APPDATA')}\\.minecraft\\mods\\")
     modsPath = ui.verifyModsPath(f"{os.getenv('APPDATA')}\\.minecraft\\mods\\")
+    installer = ui.selectInstaller()
+    if not os.path.exists(modsPath):
+        os.makedirs(modsPath)
 
     if len(os.listdir(modsPath)) > 0:
         deletePreExistingMods = ui.managePreExistingMods(modsPath)
