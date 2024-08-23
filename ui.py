@@ -1,4 +1,4 @@
-import os
+import os, time
 
 class ui:
     def selectInstaller() -> str:
@@ -8,6 +8,8 @@ class ui:
                 installerList.append(path)
                 
         if len(installerList) < 1:
+            print("No installers found")
+            time.sleep(3)
             raise Exception("No installers found")
         elif len(installerList) == 1:
             return installerList[0]
